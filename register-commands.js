@@ -4,7 +4,12 @@ require('dotenv').config();
 const commands = [
   new SlashCommandBuilder()
     .setName('registrar_usuario')
-    .setDescription('Verifica uma informação textual.')
+    .setDescription('Registra um MEMBRO na BASE.')
+    .addStringOption(opt =>
+      opt.setName('id_discord')
+         .setDescription('Texto para verificar')
+         .setRequired(true)
+    )
     .addStringOption(opt =>
       opt.setName('nick_discord')
          .setDescription('Texto para verificar')
@@ -64,11 +69,55 @@ const commands = [
          .setDescription('razao social da empresa')
          .setRequired(true)
     )
-        .addStringOption(opt =>
+        .addBooleanOption(opt =>
       opt.setName('orgao_publico')
          .setDescription('empresa é órgão público?')
          .setRequired(true)
     )   ,
+
+
+     new SlashCommandBuilder()
+    .setName('registrar_crime')
+    .setDescription('Realiza o registro de uma prisao/detencao no RP.')
+    .addAttachmentOption(opt =>
+      opt.setName('arquivo')
+         .setDescription('Imagem da detencao/prisao')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('usuario_infrator')
+         .setDescription('usuario a ser linkado como infrator')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('autoridade_registrante')
+         .setDescription('autoridade registrante')
+         .setRequired(true)
+    )
+        .addStringOption(opt =>
+      opt.setName('descricao_da_infracao')
+         .setDescription('Descricao da infracao (Artigos enquadrados)')
+         .setRequired(true)
+         
+    )   
+        .addNumberOption(opt =>
+      opt.setName('valor_fiança')
+         .setDescription('Valor afiançavel')
+         .setRequired(true)
+         
+    )  
+        .addNumberOption(opt =>
+      opt.setName('tempo_detencao')
+         .setDescription('Tempo de detencao')
+         .setRequired(true)
+         
+    )  
+        .addBooleanOption(opt =>
+      opt.setName('fiança_paga')
+         .setDescription('Registro de pagamento da fiaça e liberacao')
+         .setRequired(true)
+         
+    )  ,
 
   new SlashCommandBuilder()
     .setName('postmensagem')

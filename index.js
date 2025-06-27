@@ -53,9 +53,9 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 
  if (interaction.commandName === 'registrar_usuario') {
-  const userIdNotFormat = interaction.options.getString('nick_discord');
+  const userIdNotFormat = interaction.options.getString('id_discord');
   const idDiscord = userIdNotFormat?.replace(/[<@>]/g, '');
-  const nickname = "user"
+  const nickname = interaction.options.getString('nick_discord');
   const nameServer = interaction.options.getString('name_server');
   const userType = 'PLAYER';
 
@@ -125,12 +125,38 @@ client.on(Events.InteractionCreate, async interaction => {
       if (!response.ok) {
         const errorText = await response.text();
         console.log("🚀 ~ errorText:", errorText)
+      
         return interaction.editReply(`❌ Erro ao criar usuário: ${errorText}`);
       }
 
       const data = await response.json();
-      return interaction.editReply(`✅ Usuário criado com sucesso: ${data.name}`);
-    } catch (err) {
+
+        const stringName = data.primaryName + data.lastName
+        const embed = new EmbedBuilder()
+          .setTitle(stringName.toUpperCase())
+          .setDescription("PRIMEIRO NOME: "+ data.primaryName +"\n" + "SOBRENOME: "+ data.primaryName  +"\n"+"NPF - (Numero de Pessoa Fisica):" + data.NPF +"\n" + "USUARIO DISCORD: @" + data.person.user.nickname )
+          .setImage(data.person.urlImage)
+          .setColor(0xFFA500)
+          .setTimestamp();
+
+        // 3) Envia no canal desejado:
+        const TARGET_CHANNEL_ID = process.env.REGISTER_USERS;  
+        // ou "123456789012345678" direto aqui, se preferir
+        const channel = await client.channels.fetch(TARGET_CHANNEL_ID);
+        if (!channel || !channel.isTextBased()) {
+          return interaction.reply({
+            content: '❌ Não consegui encontrar o canal de destino.',
+            ephemeral: true
+          });
+        }
+
+        // 4) Posta o embed “anônimo” no canal alvo
+        await channel.send({ embeds: [embed] });
+
+        // 5) Confirma para quem executou, mas de modo oculto
+        return interaction.editReply({ content: '✅ Usuario criado e postado com sucesso!' });   
+  
+  } catch (err) {
       console.error(err);
       return interaction.editReply('❌ Ocorreu um erro ao tentar criar o usuário.');
     }
@@ -183,7 +209,84 @@ client.on(Events.InteractionCreate, async interaction => {
     }
   }
 
+ if (interaction.commandName === 'registrar_crime') {
 
+    const attachment = interaction.options.getAttachment('arquivo');
+    
+    if (!attachment || !attachment.contentType?.startsWith('image/')) {
+      return interaction.reply({
+        content: '❌ Por favor envie um arquivo de imagem válido.',
+        ephemeral: true
+      });
+    }
+
+    const authorIdNotFormat = interaction.options.getString('autoridade_registrante');
+    const authorRecordIDDiscord = authorIdNotFormat?.replace(/[<@>]/g, '');
+
+    const offenderIdNotFormat = interaction.options.getString('usuario_infrator');
+    const offenderIDDiscord = offenderIdNotFormat?.replace(/[<@>]/g, '');
+
+    const descriptionSituation = interaction.options.getString('descricao_da_infracao');
+    const coast = interaction.options.getNumber('valor_fiança');
+    const timeOfConfinement = interaction.options.getNumber('tempo_detencao');
+    const paymentPending = interaction.options.getBoolean('fiança_paga');
+
+    const urlImage = attachment.url
+
+  await interaction.deferReply({ ephemeral: true });
+
+  try {
+    const response = await fetch('http://localhost:4000/criminal-record', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        authorRecordIDDiscord,
+        offenderIDDiscord,
+        descriptionSituation,
+        coast,
+        timeOfConfinement,
+        paymentPending,
+        urlImage
+      })
+    });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log("🚀 ~ errorText:", errorText)
+        return interaction.editReply(`❌ Erro ao criar usuário: ${errorText}`);
+      }
+
+      const data = await response.json();   
+
+        const embed = new EmbedBuilder()
+          .setTitle("FICHA CRIMINAL")
+          .setDescription("NPF - infrator: " + data.offender.NPF +"\n"+"NPF - autoridade: " + data.authorRecord.NPF +"\n"  + "DESCRIÇÃO DA DETENCAO: " + data.descriptionSituation )
+          .setImage(data.urlImage)
+          .setColor(0xAE0F00)
+          .setTimestamp();
+
+        // 3) Envia no canal desejado:
+        const TARGET_CHANNEL_ID = process.env.REGISTER_CRIMINAL;  
+        // ou "123456789012345678" direto aqui, se preferir
+        const channel = await client.channels.fetch(TARGET_CHANNEL_ID);
+        if (!channel || !channel.isTextBased()) {
+          return interaction.reply({
+            content: '❌ Não consegui encontrar o canal de destino.',
+            ephemeral: true
+          });
+        }
+
+        // 4) Posta o embed “anônimo” no canal alvo
+        await channel.send({ embeds: [embed] });
+
+        // 5) Confirma para quem executou, mas de modo oculto
+        return interaction.editReply({ content: '✅ Usuario criado e postado com sucesso!' });   
+  
+    } catch (err) {
+      console.error(err);
+      return interaction.editReply('❌ Ocorreu um erro ao tentar criar o usuário.');
+    }
+  }
 
   // ---- /verificar ----
   if (interaction.commandName === 'verificar_info') {
