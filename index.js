@@ -136,6 +136,53 @@ client.on(Events.InteractionCreate, async interaction => {
     }
   }
 
+  if (interaction.commandName === 'registrar_empresa') {
+
+    const attachment = interaction.options.getAttachment('arquivo');
+    
+    if (!attachment || !attachment.contentType?.startsWith('image/')) {
+      return interaction.reply({
+        content: '❌ Por favor envie um arquivo de imagem válido.',
+        ephemeral: true
+      });
+    }
+
+    const userIdNotFormat = interaction.options.getString('proprietario');
+    const userIdDiscord = userIdNotFormat?.replace(/[<@>]/g, '');
+
+    const companyName = interaction.options.getString('rasao_social');
+    const publicCompany = interaction.options.getString('orgao_publico');
+ 
+    const urlImage = attachment.url
+
+  await interaction.deferReply({ ephemeral: true });
+
+  try {
+    const response = await fetch('http://localhost:4000/pessoa-juridica', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userIdDiscord,
+        companyName,
+        publicCompany,
+        urlImage
+      })
+    });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log("🚀 ~ errorText:", errorText)
+        return interaction.editReply(`❌ Erro ao criar Empresa: ${errorText}`);
+      }
+
+      const data = await response.json();
+      return interaction.editReply(`✅ Empresa criado com sucesso: ${data.name}`);
+    } catch (err) {
+      console.error(err);
+      return interaction.editReply('❌ Ocorreu um erro ao tentar criar o usuário.');
+    }
+  }
+
 
 
   // ---- /verificar ----

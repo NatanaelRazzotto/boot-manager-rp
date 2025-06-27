@@ -45,6 +45,31 @@ const commands = [
          .setRequired(false)
     ),
 
+    
+    new SlashCommandBuilder()
+    .setName('registrar_empresa')
+    .setDescription('Realiza o registro de uma empresa no RP.')
+    .addAttachmentOption(opt =>
+      opt.setName('arquivo')
+         .setDescription('Imagem LOGO da empresa')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('proprietario')
+         .setDescription('usuario a ser linkado como dono')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('rasao_social')
+         .setDescription('razao social da empresa')
+         .setRequired(true)
+    )
+        .addStringOption(opt =>
+      opt.setName('orgao_publico')
+         .setDescription('empresa é órgão público?')
+         .setRequired(true)
+    )   ,
+
   new SlashCommandBuilder()
     .setName('postmensagem')
     .setDescription('Posta um embed de imagem em canal específico.')
