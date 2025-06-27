@@ -62,7 +62,7 @@ client.on(Events.InteractionCreate, async interaction => {
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    const response = await fetch('http://localhost:4000/user', {
+    const response = await fetch(process.env.SERVER+'/user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -110,7 +110,7 @@ client.on(Events.InteractionCreate, async interaction => {
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    const response = await fetch('http://localhost:4000/pessoa-fisica', {
+    const response = await fetch(process.env.SERVER+'/pessoa-fisica', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -184,7 +184,7 @@ client.on(Events.InteractionCreate, async interaction => {
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    const response = await fetch('http://localhost:4000/pessoa-juridica', {
+    const response = await fetch(process.env.SERVER+'/pessoa-juridica', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -236,7 +236,7 @@ client.on(Events.InteractionCreate, async interaction => {
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    const response = await fetch('http://localhost:4000/criminal-record', {
+    const response = await fetch(process.env.SERVER+'/criminal-record', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
