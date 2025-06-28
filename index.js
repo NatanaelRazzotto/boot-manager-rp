@@ -131,10 +131,10 @@ client.on(Events.InteractionCreate, async interaction => {
 
       const data = await response.json();
 
-        const stringName = data.primaryName + data.lastName
+        const stringName = data.primaryName +" "+ data.lastName
         const embed = new EmbedBuilder()
           .setTitle(stringName.toUpperCase())
-          .setDescription("PRIMEIRO NOME: "+ data.primaryName +"\n" + "SOBRENOME: "+ data.primaryName  +"\n"+"NPF - (Numero de Pessoa Fisica):" + data.NPF +"\n" + "USUARIO DISCORD: @" + data.person.user.nickname )
+          .setDescription("PRIMEIRO NOME: "+ data.primaryName +"\n" + "SOBRENOME: "+ data.lastName  +"\n"+"NPF - (Numero de Pessoa Fisica):" + data.NPF +"\n" + "USUARIO DISCORD: @" + data.person.user.nickname )
           .setImage(data.person.urlImage)
           .setColor(0xFFA500)
           .setTimestamp();
