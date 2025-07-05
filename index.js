@@ -1,22 +1,13 @@
-const {
-  Client,
-  GatewayIntentBits,
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  StringSelectMenuBuilder,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
-  Events,
-  MessageFlags,
-  EmbedBuilder      
-} = require('discord.js');
 
-require('dotenv').config();
 
-const http = require('http');
+import { Client, GatewayIntentBits,  Events, EmbedBuilder} from 'discord.js';
+import dotenv from 'dotenv';
 
+dotenv.config(); 
+import http from 'http';
+
+
+import { generate_EmbedCode } from './utils/utilitys.js';
 
 const client = new Client({
   intents: [
@@ -131,7 +122,10 @@ client.on(Events.InteractionCreate, async interaction => {
 
       const data = await response.json();
 
-        const stringName = data.primaryName +" "+ data.lastName
+              // 3) Envia no canal desejado:
+        const TARGET_CHANNEL_ID = process.env.REGISTER_USERS;  
+
+       const stringName = data.primaryName +" "+ data.lastName
         const embed = new EmbedBuilder()
           .setTitle(stringName.toUpperCase())
           .setDescription("PRIMEIRO NOME: "+ data.primaryName +"\n" + "SOBRENOME: "+ data.lastName  +"\n"+"NPF - (Numero de Pessoa Fisica):" + data.NPF +"\n" + "USUARIO DISCORD: @" + data.person.user.nickname )
@@ -139,23 +133,8 @@ client.on(Events.InteractionCreate, async interaction => {
           .setColor(0xFFA500)
           .setTimestamp();
 
-        // 3) Envia no canal desejado:
-        const TARGET_CHANNEL_ID = process.env.REGISTER_USERS;  
-        // ou "123456789012345678" direto aqui, se preferir
-        const channel = await client.channels.fetch(TARGET_CHANNEL_ID);
-        if (!channel || !channel.isTextBased()) {
-          return interaction.reply({
-            content: '❌ Não consegui encontrar o canal de destino.',
-            ephemeral: true
-          });
-        }
-
-        // 4) Posta o embed “anônimo” no canal alvo
-        await channel.send({ embeds: [embed] });
-
-        // 5) Confirma para quem executou, mas de modo oculto
-        return interaction.editReply({ content: '✅ Usuario criado e postado com sucesso!' });   
-  
+      return await generate_EmbedCode(embed,TARGET_CHANNEL_ID, client, interaction);
+       
   } catch (err) {
       console.error(err);
       return interaction.editReply('❌ Ocorreu um erro ao tentar criar o usuário.');
@@ -177,7 +156,7 @@ client.on(Events.InteractionCreate, async interaction => {
     const userIdDiscord = userIdNotFormat?.replace(/[<@>]/g, '');
 
     const companyName = interaction.options.getString('rasao_social');
-    const publicCompany = interaction.options.getString('orgao_publico');
+    const publicCompany = interaction.options.getBoolean('orgao_publico');
  
     const urlImage = attachment.url
 
@@ -202,7 +181,19 @@ client.on(Events.InteractionCreate, async interaction => {
       }
 
       const data = await response.json();
-      return interaction.editReply(`✅ Empresa criado com sucesso: ${data.name}`);
+     
+                    // 3) Envia no canal desejado:
+        const TARGET_CHANNEL_ID = process.env.REGISTER_COMPANY;  
+
+       const stringName = data.companyName
+        const embed = new EmbedBuilder()
+          .setTitle(stringName.toUpperCase())
+          .setDescription("NOME DA COMPANHIA: "+ data.companyName +"\n"+"INPJ - (Indice Numerico de Pessoa Juridica):" + data.INPJ +"\n" + "USUARIO DISCORD: @" + data.person.user.nickname )
+          .setImage(data.person.urlImage)
+          .setColor(0xFFA500)
+          .setTimestamp();
+
+           return await generate_EmbedCode(embed,TARGET_CHANNEL_ID, client, interaction);
     } catch (err) {
       console.error(err);
       return interaction.editReply('❌ Ocorreu um erro ao tentar criar o usuário.');
