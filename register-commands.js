@@ -1,7 +1,20 @@
-const { SlashCommandBuilder, REST, Routes } = require('discord.js');
-require('dotenv').config();
+import { REST, Routes, SlashCommandBuilder } from 'discord.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const commands = [
+
+  new SlashCommandBuilder()
+    .setName('transito-registrar_multa')
+    .setDescription('Realiza o registro de uma infração de transito')
+       .addAttachmentOption(opt =>
+      opt.setName('imagem')
+         .setDescription('Registro_ocorrencia')
+         .setRequired(true)
+    ),  
+
+
   new SlashCommandBuilder()
     .setName('registrar_usuario')
     .setDescription('Registra um MEMBRO na BASE.')
@@ -18,6 +31,25 @@ const commands = [
     .addStringOption(opt =>
       opt.setName('name_server')
          .setDescription('Texto para verificar')
+         .setRequired(true)
+    ),
+
+     new SlashCommandBuilder()
+    .setName('registrar_emprego')
+    .setDescription('Registra um MEMBRO na BASE.')
+    .addStringOption(opt =>
+      opt.setName('npf')
+         .setDescription('Funcionario')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('inpf')
+         .setDescription('empresa')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('position')
+         .setDescription('Funcao')
          .setRequired(true)
     ),
 
@@ -49,6 +81,64 @@ const commands = [
          .setDescription('Nascimento do personagem')
          .setRequired(false)
     ),
+
+
+     new SlashCommandBuilder()
+    .setName('transito-registrar_veiculo')
+    .setDescription('Realiza o registro de um veiculo para um personagem no RP.')
+    .addAttachmentOption(opt =>
+      opt.setName('arquivo')
+         .setDescription('Imagem PERFIL do personagem')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('npf_proprietario')
+         .setDescription('personagem proprietario')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('serie_modelo')
+         .setDescription('codigo do modelo de veiculo')
+         .setRequired(true)
+    )
+        .addStringOption(opt =>
+      opt.setName('placa')
+         .setDescription('sobrenome')
+         .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('prefixo')
+         .setDescription('Prefixo de Frota')
+         .setRequired(false)
+    ),
+
+     new SlashCommandBuilder()
+    .setName('obter_personagem')
+    .setDescription('Obtém informações de um personagem registrado.')
+    .addStringOption(opt =>
+      opt.setName('npf')
+         .setDescription('NPF do personagem')
+         .setRequired(true)
+    )  ,
+
+         new SlashCommandBuilder()
+      .setName('obter_profissao_personagem')
+      .setDescription('Obtém informações de profissao de um personagem.')
+      .addStringOption(opt =>
+        opt.setName('npf')
+          .setDescription('NPF do personagem')
+          .setRequired(true)
+      )  ,
+
+      
+         new SlashCommandBuilder()
+      .setName('obter_ficha_criminal_personagem')
+      .setDescription('Obtém certidao negativa de um personagem.')
+      .addStringOption(opt =>
+        opt.setName('npf')
+          .setDescription('NPF do personagem')
+          .setRequired(true)
+      )  ,
 
     
     new SlashCommandBuilder()
