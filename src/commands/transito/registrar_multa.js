@@ -1,5 +1,18 @@
 
-    export default async function registrarMulta(interaction) {//transito-registrar_multa
+   import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
+   export default async function registrarMulta(interaction,client) {//transito-registrar_multa
 
         const attachment = interaction.options.getAttachment('imagem');
         

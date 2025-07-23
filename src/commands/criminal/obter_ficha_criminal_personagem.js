@@ -1,5 +1,17 @@
-
-      export default async function obterFichaCriminalPersonagem(interaction) {
+import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
+      export default async function obterFichaCriminalPersonagem(interaction,client) {
       const npf = interaction.options.getString('npf');
       const userIdNotFormat = interaction.user.id;
 

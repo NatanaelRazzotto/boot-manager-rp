@@ -1,4 +1,17 @@
-  export default async function registrarCrime(interaction) {
+  import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
+  export default async function registrarCrime(interaction,client){
 
         const attachment = interaction.options.getAttachment('arquivo');
         

@@ -1,6 +1,17 @@
-// ---- /imagem ----
-
-    export default async function imagem(interaction) {
+import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
+    export default async function imagemPost(interaction,client){
         // pega o attachment enviado no comando
         const title = interaction.options.getString('titulo');
   const rawDescription = interaction.options.getString('descricao') || '';

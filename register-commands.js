@@ -84,7 +84,7 @@ const commands = [
 
 
      new SlashCommandBuilder()
-    .setName('transito-registrar_veiculo')
+    .setName('transito_registrar_veiculo')
     .setDescription('Realiza o registro de um veiculo para um personagem no RP.')
     .addAttachmentOption(opt =>
       opt.setName('arquivo')

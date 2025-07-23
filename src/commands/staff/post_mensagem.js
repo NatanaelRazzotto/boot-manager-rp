@@ -1,5 +1,18 @@
+import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
 
-            export default async function postMensagem(interaction) {
+            export default async function postMensagem(interaction,client) {
         // 1) Pega as opções:
         const title       = interaction.options.getString('titulo');
         const description = interaction.options.getString('descricao');

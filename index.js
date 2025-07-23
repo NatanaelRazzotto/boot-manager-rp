@@ -12,6 +12,7 @@ import {
   EmbedBuilder          // ✅
 } from 'discord.js';
 import dotenv from 'dotenv';
+import http from 'http'
 
 import handleInteraction from './src/events/interactionCreate.js';
 

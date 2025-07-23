@@ -1,4 +1,17 @@
-    export default async function bprvRegistrar(interaction) {
+    import { 
+  Client, 
+  GatewayIntentBits, 
+  Events, 
+  StringSelectMenuBuilder, 
+  ActionRowBuilder, 
+  ButtonBuilder, 
+  ButtonStyle ,
+  ModalBuilder,               // ✅ <- adicione isso
+  TextInputBuilder,           // ✅ <- e isso também, se ainda não tiver
+  TextInputStyle,   
+  EmbedBuilder          // ✅
+} from 'discord.js';
+    export default async function bprvRegistrar(interaction,client) {
      const userData = userMultaData.get(interaction.user.id);
 
           if (!userData) {
